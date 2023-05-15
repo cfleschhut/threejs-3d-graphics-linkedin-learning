@@ -25,10 +25,13 @@ const init = () => {
   const box = getBox(1, 1, 1);
   const plane = getPlane(4);
 
+  plane.name = 'plane-1';
+
   box.position.y = box.geometry.parameters.height / 2;
   plane.rotation.x = Math.PI / 2;
+  plane.position.y = 1;
 
-  scene.add(box);
+  plane.add(box);
   scene.add(plane);
 
   const camera = new THREE.PerspectiveCamera(
@@ -49,7 +52,23 @@ const init = () => {
 
   document.getElementById('webgl').append(renderer.domElement);
 
-  renderer.render(scene, camera);
+  update(renderer, scene, camera);
+
+  return scene;
 };
 
-init();
+const update = (renderer, scene, camera) => {
+  requestAnimationFrame(() => update(renderer, scene, camera));
+
+  renderer.render(scene, camera);
+
+  const plane = scene.getObjectByName('plane-1');
+  plane.rotation.y += 0.001;
+  plane.rotation.z += 0.001;
+
+  scene.traverse((child) => {
+    child.scale.x += 0.001;
+  });
+};
+
+window.scene = init();
