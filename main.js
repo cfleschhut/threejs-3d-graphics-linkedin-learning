@@ -8,11 +8,28 @@ const getBox = (width, height, depth) => {
   return mesh;
 };
 
+const getPlane = (size) => {
+  const geometry = new THREE.PlaneGeometry(size, size);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+
+  return mesh;
+};
+
 const init = () => {
   const scene = new THREE.Scene();
 
   const box = getBox(1, 1, 1);
+  const plane = getPlane(4);
+
+  box.position.y = box.geometry.parameters.height / 2;
+  plane.rotation.x = Math.PI / 2;
+
   scene.add(box);
+  scene.add(plane);
 
   const camera = new THREE.PerspectiveCamera(
     45,
