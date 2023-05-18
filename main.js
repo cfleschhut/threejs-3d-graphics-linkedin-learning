@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as dat from 'dat.gui';
 
 const getBox = (width, height, depth) => {
   const geometry = new THREE.BoxGeometry(width, height, depth);
@@ -46,6 +47,7 @@ const update = (renderer, scene, camera) => {
 
 const init = () => {
   const scene = new THREE.Scene();
+  const gui = new dat.GUI();
 
   const enableFog = false;
 
@@ -61,8 +63,12 @@ const init = () => {
   plane.name = 'plane-1';
 
   box.position.y = box.geometry.parameters.height / 2;
-  plane.rotation.x = Math.PI / 2;
+  plane.rotation.x = THREE.MathUtils.DEG2RAD * 90;
   pointLight.position.y = 2;
+  pointLight.intensity = 1;
+
+  gui.add(pointLight, 'intensity', 0, 10);
+  gui.add(pointLight.position, 'y', 0, 5);
 
   scene.add(box);
   scene.add(plane);
@@ -76,9 +82,7 @@ const init = () => {
     1000
   );
 
-  camera.position.x = 1;
-  camera.position.y = 2;
-  camera.position.z = 5;
+  camera.position.set(1, 2, 5);
 
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
