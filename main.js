@@ -13,6 +13,34 @@ const getBox = (width, height, depth) => {
   return mesh;
 };
 
+const getBoxGrid = (amount, separationMultiplier) => {
+  const group = new THREE.Group();
+
+  for (let i = 0; i < amount; i++) {
+    const obj = getBox(1, 1, 1);
+
+    obj.position.x = i * separationMultiplier;
+    obj.position.y = obj.geometry.parameters.height / 2;
+
+    group.add(obj);
+
+    for (let j = 0; j < amount; j++) {
+      const obj = getBox(1, 1, 1);
+
+      obj.position.x = i * separationMultiplier;
+      obj.position.y = obj.geometry.parameters.height / 2;
+      obj.position.z = j * separationMultiplier;
+
+      group.add(obj);
+    }
+  }
+
+  group.position.x = -((amount - 1) * separationMultiplier) / 2;
+  group.position.z = -((amount - 1) * separationMultiplier) / 2;
+
+  return group;
+};
+
 const getPlane = (size) => {
   const geometry = new THREE.PlaneGeometry(size, size);
   const material = new THREE.MeshPhongMaterial({
@@ -61,14 +89,13 @@ const init = () => {
     scene.fog = new THREE.FogExp2(0xffffff, 0.2);
   }
 
-  const box = getBox(1, 1, 1);
+  const boxGrid = getBoxGrid(10, 1.5);
   const plane = getPlane(20);
   const pointLight = getPointLight(1);
   const sphere = getSphere(0.05);
 
   plane.name = 'plane-1';
 
-  box.position.y = box.geometry.parameters.height / 2;
   plane.rotation.x = THREE.MathUtils.DEG2RAD * 90;
   pointLight.position.y = 2;
   pointLight.intensity = 1;
@@ -76,7 +103,7 @@ const init = () => {
   gui.add(pointLight, 'intensity', 0, 10);
   gui.add(pointLight.position, 'y', 0, 5);
 
-  scene.add(box);
+  scene.add(boxGrid);
   scene.add(plane);
   pointLight.add(sphere);
   scene.add(pointLight);
