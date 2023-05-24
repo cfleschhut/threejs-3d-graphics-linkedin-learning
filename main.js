@@ -8,6 +8,7 @@ const getBox = (width, height, depth) => {
     color: 'rgb(120, 120, 120)',
   });
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = true;
 
   return mesh;
 };
@@ -19,6 +20,7 @@ const getPlane = (size) => {
     side: THREE.DoubleSide,
   });
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.receiveShadow = true;
 
   return mesh;
 };
@@ -36,6 +38,7 @@ const getSphere = (size) => {
 
 const getPointLight = (intensity) => {
   const light = new THREE.PointLight(0xffffff, intensity);
+  light.castShadow = true;
 
   return light;
 };
@@ -90,6 +93,7 @@ const init = () => {
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   const renderer = new THREE.WebGLRenderer();
+  renderer.shadowMap.enabled = true;
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor('rgb(120, 120, 120)');
 
