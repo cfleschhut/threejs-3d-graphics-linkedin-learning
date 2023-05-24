@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const getBox = (width, height, depth) => {
   const geometry = new THREE.BoxGeometry(width, height, depth);
@@ -39,8 +40,10 @@ const getPointLight = (intensity) => {
   return light;
 };
 
-const update = (renderer, scene, camera) => {
-  requestAnimationFrame(() => update(renderer, scene, camera));
+const update = (renderer, scene, camera, controls) => {
+  requestAnimationFrame(() => update(renderer, scene, camera, controls));
+
+  controls.update();
 
   renderer.render(scene, camera);
 };
@@ -92,7 +95,9 @@ const init = () => {
 
   document.getElementById('webgl').append(renderer.domElement);
 
-  update(renderer, scene, camera);
+  const controls = new OrbitControls(camera, renderer.domElement);
+
+  update(renderer, scene, camera, controls);
 
   return scene;
 };
