@@ -71,6 +71,17 @@ const getPointLight = (intensity) => {
   return light;
 };
 
+const getSpotLight = (intensity) => {
+  const light = new THREE.SpotLight(0xffffff, intensity);
+  light.castShadow = true;
+
+  light.shadow.bias = 0.001;
+  light.shadow.mapSize.width = 2048;
+  light.shadow.mapSize.height = 2048;
+
+  return light;
+};
+
 const update = (renderer, scene, camera, controls) => {
   requestAnimationFrame(() => update(renderer, scene, camera, controls));
 
@@ -91,22 +102,25 @@ const init = () => {
 
   const boxGrid = getBoxGrid(10, 1.5);
   const plane = getPlane(20);
-  const pointLight = getPointLight(1);
+  const spotLight = getSpotLight(1);
   const sphere = getSphere(0.05);
 
   plane.name = 'plane-1';
 
   plane.rotation.x = THREE.MathUtils.DEG2RAD * 90;
-  pointLight.position.y = 2;
-  pointLight.intensity = 1;
+  spotLight.position.y = 4;
+  spotLight.intensity = 2;
 
-  gui.add(pointLight, 'intensity', 0, 10);
-  gui.add(pointLight.position, 'y', 0, 5);
+  gui.add(spotLight.position, 'x', 0, 20);
+  gui.add(spotLight.position, 'y', 0, 20);
+  gui.add(spotLight.position, 'z', 0, 20);
+  gui.add(spotLight, 'intensity', 0, 10);
+  gui.add(spotLight, 'penumbra', 0, 1);
 
   scene.add(boxGrid);
   scene.add(plane);
-  pointLight.add(sphere);
-  scene.add(pointLight);
+  spotLight.add(sphere);
+  scene.add(spotLight);
 
   const camera = new THREE.PerspectiveCamera(
     45,
