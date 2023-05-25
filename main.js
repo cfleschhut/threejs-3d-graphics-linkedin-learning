@@ -94,6 +94,12 @@ const getDirectionalLight = (intensity) => {
   return light;
 };
 
+const getAmbientLight = (intensity) => {
+  const light = new THREE.AmbientLight('rgb(0, 0, 100)', intensity);
+
+  return light;
+};
+
 const update = (renderer, scene, camera, controls) => {
   requestAnimationFrame(() => update(renderer, scene, camera, controls));
 
@@ -117,11 +123,14 @@ const init = () => {
   const directionalLight = getDirectionalLight(1);
   const sphere = getSphere(0.05);
   const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+  const ambientLight = getAmbientLight(1);
 
   plane.name = 'plane-1';
 
   plane.rotation.x = THREE.MathUtils.DEG2RAD * 90;
-  directionalLight.position.y = 4;
+  directionalLight.position.x = 13;
+  directionalLight.position.y = 10;
+  directionalLight.position.z = 10;
   directionalLight.intensity = 2;
 
   gui.add(directionalLight.position, 'x', 0, 20);
@@ -134,6 +143,7 @@ const init = () => {
   directionalLight.add(sphere);
   scene.add(directionalLight);
   scene.add(helper);
+  scene.add(ambientLight);
 
   const camera = new THREE.PerspectiveCamera(
     45,
